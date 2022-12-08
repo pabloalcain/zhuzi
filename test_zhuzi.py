@@ -3,10 +3,10 @@ import pandas as pd
 
 class DataSet:
     def __init__(self, dataframe: pd.DataFrame) -> None:
-        pass
+        self.dataframe = dataframe
 
     def is_empty(self) -> bool:
-        return True
+        return len(self.dataframe) == 0
 
 
 def test_create_empty_dataset_from_empty_dataframe():
@@ -15,3 +15,11 @@ def test_create_empty_dataset_from_empty_dataframe():
     dataset = DataSet(empty_dataframe)
     # then
     assert dataset.is_empty()
+
+
+def test_create_nonempty_dataset_from_nonempty_dataframe():
+    # given
+    non_empty_dataframe = pd.DataFrame([1])
+    dataset = DataSet(non_empty_dataframe)
+    # then
+    assert not dataset.is_empty()
