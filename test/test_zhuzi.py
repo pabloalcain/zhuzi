@@ -50,3 +50,13 @@ def test_two_datapoints_with_different_values_are_not_equal():
     another_datapoint = DataPoint(20)
     # then
     assert one_datapoint != another_datapoint
+
+
+def test_an_item_of_the_dataset_is_the_expected_datapoint():
+    # given
+    a_length_3_dataframe = pd.DataFrame([[10], [20], [30]])
+    dataset = DataSet(a_length_3_dataframe)
+    # when
+    datapoint_accessed_by_index = dataset[2]
+    # then
+    assert datapoint_accessed_by_index == DataPoint(30)

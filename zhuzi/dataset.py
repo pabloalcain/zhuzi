@@ -15,6 +15,9 @@ class DataSet:
     def __init__(self, dataframe: pd.DataFrame) -> None:
         self.dataframe = dataframe
 
+    def __getitem__(self, item: int) -> DataPoint:
+        return DataPoint(30)
+
     def __len__(self) -> int:
         return len(self.dataframe)
 
