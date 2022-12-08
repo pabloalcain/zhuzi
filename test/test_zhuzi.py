@@ -3,6 +3,8 @@ import pytest
 
 from zhuzi.dataset import DataPoint, DataSet
 
+A_LENGTH_3_DATAFRAME = pd.DataFrame([[10], [20], [30]])
+
 
 def test_create_empty_dataset_from_empty_dataframe():
     # given
@@ -22,8 +24,7 @@ def test_create_nonempty_dataset_from_nonempty_dataframe():
 
 def test_dataset_keeps_length_of_the_original_dataframe():
     # given
-    a_length_3_dataframe = pd.DataFrame([[10], [20], [30]])
-    dataset = DataSet(a_length_3_dataframe)
+    dataset = DataSet(A_LENGTH_3_DATAFRAME)
     # then
     assert len(dataset) == 3
 
@@ -54,8 +55,7 @@ def test_two_datapoints_with_different_values_are_not_equal():
 
 def test_an_item_of_the_dataset_is_the_expected_datapoint():
     # given
-    a_length_3_dataframe = pd.DataFrame([[10], [20], [30]])
-    dataset = DataSet(a_length_3_dataframe)
+    dataset = DataSet(A_LENGTH_3_DATAFRAME)
     # when
     datapoint_accessed_by_index = dataset[2]
     # then
