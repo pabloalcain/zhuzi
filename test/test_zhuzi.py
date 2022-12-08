@@ -1,26 +1,7 @@
 import pandas as pd
 import pytest
 
-
-class DataPoint:
-    def __init__(self, value: int):
-        self.value = value
-
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, DataPoint):
-            raise NotImplementedError
-        return self.value == other.value
-
-
-class DataSet:
-    def __init__(self, dataframe: pd.DataFrame) -> None:
-        self.dataframe = dataframe
-
-    def __len__(self) -> int:
-        return len(self.dataframe)
-
-    def is_empty(self) -> bool:
-        return len(self) == 0
+from zhuzi.dataset import DataPoint, DataSet
 
 
 def test_create_empty_dataset_from_empty_dataframe():
