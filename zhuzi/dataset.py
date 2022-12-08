@@ -16,7 +16,10 @@ class DataSet:
         self.dataframe = dataframe
 
     def __getitem__(self, item: int) -> DataPoint:
-        return DataPoint(30)
+        return DataPoint(self._raw_item_in_row_at(item))
+
+    def _raw_item_in_row_at(self, index: int) -> int:
+        return self.dataframe.iloc[index].item()
 
     def __len__(self) -> int:
         return len(self.dataframe)

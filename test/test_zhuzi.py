@@ -60,3 +60,12 @@ def test_an_item_of_the_dataset_is_the_expected_datapoint():
     datapoint_accessed_by_index = dataset[2]
     # then
     assert datapoint_accessed_by_index == DataPoint(30)
+
+
+def test_another_item_of_the_dataset_is_the_expected_datapoint():
+    # given
+    dataset = DataSet(A_LENGTH_3_DATAFRAME)
+    # when
+    datapoint_accessed_by_index = dataset[0]
+    # then
+    assert datapoint_accessed_by_index == DataPoint(10)
