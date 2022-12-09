@@ -98,3 +98,13 @@ def test_two_datapoints_with_different_and_multiple_values_are_different():
     assert first_datapoint != second_datapoint
     assert first_datapoint != third_datapoint
     assert second_datapoint != third_datapoint
+
+
+def test_item_from_dataframe_with_multiple_columns_equals_datapoint():
+    # given
+    dataframe = pd.DataFrame([[1, 10], [2, 20], [3, 30]])
+    dataset = DataSet(dataframe)
+    # when
+    datapoint = dataset[1]
+    # then
+    assert datapoint == DataPoint(2, 20)
