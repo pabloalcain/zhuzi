@@ -69,3 +69,13 @@ def test_another_item_of_the_dataset_is_the_expected_datapoint():
     datapoint_accessed_by_index = dataset[0]
     # then
     assert datapoint_accessed_by_index == DataPoint(10)
+
+
+def test_iterate_on_dataset_returns_all_expected_datapoints_in_order():
+    # given
+    dataset = DataSet(A_LENGTH_3_DATAFRAME)
+    expected_datapoints = [DataPoint(10), DataPoint(20), DataPoint(30)]
+    # when
+    dataset_iterated_as_list = [dataset_point for dataset_point in dataset]
+    # then
+    assert dataset_iterated_as_list == expected_datapoints
