@@ -108,3 +108,24 @@ def test_item_from_dataframe_with_multiple_columns_equals_datapoint():
     datapoint = dataset[1]
     # then
     assert datapoint == DataPoint(2, 20)
+
+
+def test_datapoint_element_can_be_accessed_by_index():
+    # given
+    datapoint = DataPoint(1, 2, 3)
+    # then
+    assert datapoint[0] == 1
+
+
+def test_all_datapoint_elements_can_be_accessed_by_index():
+    # given
+    datapoint = DataPoint(1, 2, 3)
+    # then
+    assert datapoint[:] == (1, 2, 3)
+
+
+def test_datapoint_keyword_arguments_are_preserved_as_attributes():
+    # given
+    datapoint = DataPoint(one_value=1)
+    # then
+    assert datapoint.one_value == 1

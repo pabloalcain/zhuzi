@@ -1,9 +1,15 @@
+from typing import Any
+
 import pandas as pd
 
 
 class DataPoint:
-    def __init__(self, *args):
+    def __init__(self, *args, **kwargs):
         self.args = args
+        self.__dict__.update(kwargs)
+
+    def __getitem__(self, item: int) -> Any:
+        return self.args[item]
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, DataPoint):
