@@ -79,3 +79,22 @@ def test_iterate_on_dataset_returns_all_expected_datapoints_in_order():
     dataset_iterated_as_list = [dataset_point for dataset_point in dataset]
     # then
     assert dataset_iterated_as_list == expected_datapoints
+
+
+def test_two_datapoints_with_equal_and_multiple_values_are_equal():
+    # given
+    first_datapoint = DataPoint(1, 2)
+    second_datapoint = DataPoint(1, 2)
+    # then
+    assert first_datapoint == second_datapoint
+
+
+def test_two_datapoints_with_different_and_multiple_values_are_different():
+    # given
+    first_datapoint = DataPoint(1, 2)
+    second_datapoint = DataPoint(10, 2)
+    third_datapoint = DataPoint(1, 20)
+    # then
+    assert first_datapoint != second_datapoint
+    assert first_datapoint != third_datapoint
+    assert second_datapoint != third_datapoint
