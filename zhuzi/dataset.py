@@ -2,14 +2,13 @@ import pandas as pd
 
 
 class DataPoint:
-    def __init__(self, value: int, another_value: int = 1):
-        self.value = value
-        self.another_value = another_value
+    def __init__(self, *args):
+        self.args = args
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, DataPoint):
             raise NotImplementedError
-        return self.value == other.value and self.another_value == other.another_value
+        return self.args == other.args
 
 
 class DataSet:
