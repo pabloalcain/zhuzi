@@ -48,20 +48,3 @@ class DataSet:
 
     def is_empty(self) -> bool:
         return len(self) == 0
-
-
-class DataSetTemplate:
-    # point is an "abstract class attribute". The checking implementation is in `__init_subclass__`
-    # check https://stackoverflow.com/questions/49022656/
-    # /python-create-abstract-static-property-within-class
-    point = None
-
-    def __init_subclass__(cls):
-        if not any("point" in base.__dict__ for base in cls.__mro__ if base is not DataSetTemplate):
-            raise TypeError(f"Can't declare {cls.__name__} with abstract class attribute `point`")
-
-    def __init__(self):
-        values = {
-            arg: pd.Series(dtype=argtype) for arg, argtype in self.point.__annotations__.items()
-        }
-        self.dataframe = pd.DataFrame(values)
