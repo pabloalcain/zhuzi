@@ -180,3 +180,12 @@ def test_column_names_can_be_accessed_as_attributes_of_dataset(custom_1d_dataset
     custom_dataset = CustomDataSet(LEN_3_DATAFRAME)
     # then
     pd.testing.assert_series_equal(custom_dataset.my_argument, LEN_3_DATAFRAME["my_argument"])
+
+
+def test_custom_dataset_dataframe_can_have_extra_colums(custom_1d_dataset):
+    # given
+    CustomDataSet, CustomPoint = custom_1d_dataset
+    longer_dataframe = pd.DataFrame([[0, 1.0], [1, 2.0]], columns=["a_new_argument", "my_argument"])
+    custom_dataset = CustomDataSet(longer_dataframe)
+    # then
+    pd.testing.assert_frame_equal(custom_dataset.dataframe, longer_dataframe)
