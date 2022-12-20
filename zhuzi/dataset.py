@@ -39,6 +39,11 @@ class DataSet:
             return self.point(**dict(self.dataframe.iloc[item]))
         return self.point(*self._raw_items_in_row_at(item))
 
+    def __getattr__(self, item: str):
+        if item in self.dataframe.columns:
+            return self.dataframe[item]
+        return getattr(self, item)
+
     def _dataframe_has_named_columns(self):
         return not isinstance(self.dataframe.columns, pd.RangeIndex)
 

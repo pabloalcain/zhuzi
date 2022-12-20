@@ -167,3 +167,11 @@ def test_dataframes_on_datasets_cannot_have_columns_with_names_with_spaces_or_nu
     )
     with pytest.raises(ValueError, match=message):
         DataSet(dataframe)
+
+
+def test_column_names_can_be_accessed_as_attributes_of_dataset():
+    # given
+    dataframe = pd.DataFrame([[1], [2], [3]], columns=["one_value"])
+    dataset = DataSet(dataframe)
+    # then
+    pd.testing.assert_series_equal(dataset.one_value, pd.Series([1, 2, 3], name="one_value"))
