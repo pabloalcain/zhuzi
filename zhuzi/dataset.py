@@ -42,7 +42,7 @@ class DataSet:
     def __getattr__(self, item: str):
         if item in self.dataframe.columns:
             return self.dataframe[item]
-        return getattr(self, item)
+        return self.__getattribute__(item)
 
     def _dataframe_has_named_columns(self):
         return not isinstance(self.dataframe.columns, pd.RangeIndex)

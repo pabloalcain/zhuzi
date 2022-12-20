@@ -175,3 +175,20 @@ def test_column_names_can_be_accessed_as_attributes_of_dataset():
     dataset = DataSet(dataframe)
     # then
     pd.testing.assert_series_equal(dataset.one_value, pd.Series([1, 2, 3], name="one_value"))
+
+
+def test_can_still_access_public_attributes_of_dataset():
+    # given
+    dataframe = pd.DataFrame([[1], [2], [3]], columns=["one_value"])
+    dataset = DataSet(dataframe)
+    # then
+    pd.testing.assert_frame_equal(dataset.dataframe, dataframe)
+
+
+def test_trying_to_access_missing_attributes_raises_attribute_error():
+    # given
+    dataframe = pd.DataFrame([[1], [2], [3]], columns=["one_value"])
+    dataset = DataSet(dataframe)
+    # then
+    with pytest.raises(AttributeError, match="'DataSet' object has no attribute 'missing_attr'"):
+        dataset.missing_attr

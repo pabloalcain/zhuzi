@@ -152,6 +152,7 @@ def test_custom_dataset_dataframe_can_be_accessed(custom_1d_dataset):
     dataframe = pd.DataFrame({"my_argument": pd.Series(dtype="float")})
     custom_dataset = CustomDataSet(dataframe)
     # then
+    custom_dataset.dataframe
     pd.testing.assert_frame_equal(custom_dataset.dataframe, dataframe)
 
 
@@ -171,3 +172,11 @@ def test_an_item_of_the_custom_dataset_is_the_expected_datapoint(custom_1d_datas
     datapoint_accessed_by_index = custom_dataset[2]
     # then
     assert datapoint_accessed_by_index == CustomPoint(30.0)
+
+
+def test_column_names_can_be_accessed_as_attributes_of_dataset(custom_1d_dataset):
+    # given
+    CustomDataSet, CustomPoint = custom_1d_dataset
+    custom_dataset = CustomDataSet(LEN_3_DATAFRAME)
+    # then
+    pd.testing.assert_series_equal(custom_dataset.my_argument, LEN_3_DATAFRAME["my_argument"])
