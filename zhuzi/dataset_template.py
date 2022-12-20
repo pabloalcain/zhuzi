@@ -3,7 +3,7 @@ from typing import Optional, Type
 import numpy as np
 import pandas as pd
 
-from zhuzi.dataset import DataPoint, DataSet
+from zhuzi.dataset import BadDataFrameException, DataPoint, DataSet
 
 
 class DataSetTemplate(DataSet):
@@ -50,7 +50,3 @@ class DataSetTemplate(DataSet):
     @property
     def _point_args(self):
         return sorted(self.point.__annotations__.keys())
-
-
-class BadDataFrameException(Exception):
-    pass

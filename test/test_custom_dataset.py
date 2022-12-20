@@ -4,7 +4,8 @@ from dataclasses import dataclass
 import pandas as pd
 import pytest
 
-from zhuzi.dataset_template import BadDataFrameException, DataSetTemplate
+from zhuzi.dataset import BadDataFrameException
+from zhuzi.dataset_template import DataSetTemplate
 
 LEN_3_DATAFRAME = pd.DataFrame({"my_argument": pd.Series([10.0, 20.0, 30.0], dtype="float")})
 

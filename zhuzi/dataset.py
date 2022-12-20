@@ -38,7 +38,7 @@ class DataSet:
             [f'"{column}"' for column in self.dataframe.columns if not str(column).isidentifier()]
         )
         if invalid_columns:
-            raise ValueError(
+            raise BadDataFrameException(
                 f'{", ".join(invalid_columns)} not allowed as column name(s): invalid identifier(s)'
             )
 
@@ -63,3 +63,7 @@ class DataSet:
 
     def is_empty(self) -> bool:
         return len(self) == 0
+
+
+class BadDataFrameException(Exception):
+    pass

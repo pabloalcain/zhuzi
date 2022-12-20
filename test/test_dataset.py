@@ -3,7 +3,7 @@ import re
 import pandas as pd
 import pytest
 
-from zhuzi.dataset import DataPoint, DataSet
+from zhuzi.dataset import BadDataFrameException, DataPoint, DataSet
 
 A_LENGTH_3_DATAFRAME = pd.DataFrame([[10], [20], [30]])
 
@@ -150,7 +150,7 @@ def test_dataframes_on_datasets_cannot_have_columns_with_names_with_spaces():
     message = re.escape(
         f'"{forbidden_name_with_spaces}" not allowed as column name(s): ' f"invalid identifier(s)"
     )
-    with pytest.raises(ValueError, match=message):
+    with pytest.raises(BadDataFrameException, match=message):
         DataSet(dataframe)
 
 
@@ -165,7 +165,7 @@ def test_dataframes_on_datasets_cannot_have_columns_with_names_with_spaces_or_nu
         f'"{forbidden_name_is_an_int}", "{forbidden_name_with_spaces}" not allowed as column '
         f"name(s): invalid identifier(s)"
     )
-    with pytest.raises(ValueError, match=message):
+    with pytest.raises(BadDataFrameException, match=message):
         DataSet(dataframe)
 
 
@@ -211,5 +211,5 @@ def test_cannot_hotplug_badly_formed_dataframe_to_dataset():
     message = re.escape(
         f'"{forbidden_name_with_spaces}" not allowed as column name(s): ' f"invalid identifier(s)"
     )
-    with pytest.raises(ValueError, match=message):
+    with pytest.raises(BadDataFrameException, match=message):
         dataset.dataframe = dataframe
