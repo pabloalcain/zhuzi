@@ -48,3 +48,11 @@ class DataSet:
 
     def is_empty(self) -> bool:
         return len(self) == 0
+
+
+class DataSetTemplate:
+    def __init__(self):
+        values = {
+            arg: pd.Series(dtype=argtype) for arg, argtype in self.point.__annotations__.items()
+        }
+        self.dataframe = pd.DataFrame(values)
