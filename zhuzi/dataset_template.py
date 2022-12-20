@@ -1,19 +1,23 @@
-from typing import Optional
+from typing import Optional, Type
 
 import numpy as np
 import pandas as pd
 
-from zhuzi.dataset import DataSet
+from zhuzi.dataset import DataPoint, DataSet
 
 
 class DataSetTemplate(DataSet):
     # point is an "abstract class attribute". The checking implementation is in `__init_subclass__`
     # check https://stackoverflow.com/questions/49022656/
     # /python-create-abstract-static-property-within-class
-    point = None
+    point: Type = DataPoint
 
     def __init_subclass__(cls):
-        if not any("point" in base.__dict__ for base in cls.__mro__ if base is not DataSetTemplate):
+        if not any(
+            "point" in base.__dict__
+            for base in cls.__mro__
+            if base not in (DataSetTemplate, DataSet)
+        ):
             raise TypeError(f"Can't declare {cls.__name__} with abstract class attribute `point`")
 
     def __init__(self, dataframe: Optional[pd.DataFrame] = None):

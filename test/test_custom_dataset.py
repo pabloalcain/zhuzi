@@ -6,6 +6,20 @@ import pytest
 
 from zhuzi.dataset_template import BadDataFrameException, DataSetTemplate
 
+LEN_3_DATAFRAME = pd.DataFrame({"my_argument": pd.Series([10.0, 20.0, 30.0], dtype="float")})
+
+
+@pytest.fixture
+def custom_1d_dataset():
+    @dataclass
+    class CustomPoint:
+        my_argument: float
+
+    class CustomDataSet(DataSetTemplate):
+        point = CustomPoint
+
+    return CustomDataSet, CustomPoint
+
 
 def test_custom_dataset_with_defined_point_generates_empty_dataframe_with_point_args_as_columns():
     # given
@@ -114,14 +128,11 @@ def test_custom_dataset_raises_error_when_df_col_type_does_not_match_attrs_of_po
         CustomDataSet(badly_formed_dataframe)
 
 
-def test_custom_dataset_raises_error_when_df_col_type_does_not_match_attrs_of_point_triangulation():
+def test_custom_dataset_raises_error_when_df_col_type_does_not_match_attrs_of_point_triangulation(
+    custom_1d_dataset,
+):
     # given
-    @dataclass
-    class CustomPoint:
-        my_argument: float
-
-    class CustomDataSet(DataSetTemplate):
-        point = CustomPoint
+    CustomDataSet, CustomPoint = custom_1d_dataset
 
     badly_formed_dataframe = pd.DataFrame({"my_argument": pd.Series(dtype="int")})
 
@@ -135,31 +146,28 @@ def test_custom_dataset_raises_error_when_df_col_type_does_not_match_attrs_of_po
         CustomDataSet(badly_formed_dataframe)
 
 
-def test_custom_dataset_dataframe_can_be_accessed():
+def test_custom_dataset_dataframe_can_be_accessed(custom_1d_dataset):
     # given
-    @dataclass
-    class CustomPoint:
-        my_argument: float
-
-    class CustomDataSet(DataSetTemplate):
-        point = CustomPoint
-
+    CustomDataSet, CustomPoint = custom_1d_dataset
     dataframe = pd.DataFrame({"my_argument": pd.Series(dtype="float")})
     custom_dataset = CustomDataSet(dataframe)
     # then
     pd.testing.assert_frame_equal(custom_dataset.dataframe, dataframe)
 
 
-def test_custom_dataset_keeps_length_of_the_original_dataframe():
+def test_custom_dataset_keeps_length_of_the_original_dataframe(custom_1d_dataset):
     # given
-    @dataclass
-    class CustomPoint:
-        my_argument: float
-
-    class CustomDataSet(DataSetTemplate):
-        point = CustomPoint
-
-    dataframe = pd.DataFrame({"my_argument": pd.Series([10.0, 20.0, 30.0], dtype="float")})
-    custom_dataset = CustomDataSet(dataframe)
+    CustomDataSet, CustomPoint = custom_1d_dataset
+    custom_dataset = CustomDataSet(LEN_3_DATAFRAME)
     # then
     assert len(custom_dataset) == 3
+
+
+def test_an_item_of_the_custom_dataset_is_the_expected_datapoint(custom_1d_dataset):
+    # given
+    CustomDataSet, CustomPoint = custom_1d_dataset
+    custom_dataset = CustomDataSet(LEN_3_DATAFRAME)
+    # when
+    datapoint_accessed_by_index = custom_dataset[2]
+    # then
+    assert datapoint_accessed_by_index == CustomPoint(30.0)

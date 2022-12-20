@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Type
 
 import pandas as pd
 
@@ -18,6 +18,8 @@ class DataPoint:
 
 
 class DataSet:
+    point: Type = DataPoint
+
     def __init__(self, dataframe: pd.DataFrame) -> None:
         self.dataframe = dataframe
         if self._dataframe_has_named_columns():
@@ -32,10 +34,10 @@ class DataSet:
                 f'{", ".join(invalid_columns)} not allowed as column name(s): invalid identifier(s)'
             )
 
-    def __getitem__(self, item: int) -> DataPoint:
+    def __getitem__(self, item: int) -> Any:
         if self._dataframe_has_named_columns():
-            return DataPoint(**dict(self.dataframe.iloc[item]))
-        return DataPoint(*self._raw_items_in_row_at(item))
+            return self.point(**dict(self.dataframe.iloc[item]))
+        return self.point(*self._raw_items_in_row_at(item))
 
     def _dataframe_has_named_columns(self):
         return not isinstance(self.dataframe.columns, pd.RangeIndex)
