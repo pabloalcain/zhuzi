@@ -3,8 +3,10 @@ from typing import Optional
 import numpy as np
 import pandas as pd
 
+from zhuzi.dataset import DataSet
 
-class DataSetTemplate:
+
+class DataSetTemplate(DataSet):
     # point is an "abstract class attribute". The checking implementation is in `__init_subclass__`
     # check https://stackoverflow.com/questions/49022656/
     # /python-create-abstract-static-property-within-class
@@ -17,10 +19,10 @@ class DataSetTemplate:
     def __init__(self, dataframe: Optional[pd.DataFrame] = None):
         if dataframe is None:
             values = {arg: pd.Series(dtype=argtype) for arg, argtype in self._point_args_and_types}
-            self.dataframe = pd.DataFrame(values)
+            dataframe = pd.DataFrame(values)
         else:
             self._validate_columns_and_point(dataframe)
-            self.dataframe = dataframe
+        super().__init__(dataframe)
 
     def _validate_columns_and_point(self, dataframe):
         if sorted(dataframe.columns) != self._point_args:

@@ -148,3 +148,18 @@ def test_custom_dataset_dataframe_can_be_accessed():
     custom_dataset = CustomDataSet(dataframe)
     # then
     pd.testing.assert_frame_equal(custom_dataset.dataframe, dataframe)
+
+
+def test_custom_dataset_keeps_length_of_the_original_dataframe():
+    # given
+    @dataclass
+    class CustomPoint:
+        my_argument: float
+
+    class CustomDataSet(DataSetTemplate):
+        point = CustomPoint
+
+    dataframe = pd.DataFrame({"my_argument": pd.Series([10.0, 20.0, 30.0], dtype="float")})
+    custom_dataset = CustomDataSet(dataframe)
+    # then
+    assert len(custom_dataset) == 3
