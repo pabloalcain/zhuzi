@@ -22,6 +22,14 @@ class DataSet:
 
     def __init__(self, dataframe: pd.DataFrame) -> None:
         self.dataframe = dataframe
+
+    @property
+    def dataframe(self) -> pd.DataFrame:
+        return self._dataframe
+
+    @dataframe.setter
+    def dataframe(self, value: pd.DataFrame):
+        self._dataframe = value
         if self._dataframe_has_named_columns():
             self.validate_column_names()
 

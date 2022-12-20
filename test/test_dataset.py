@@ -192,3 +192,24 @@ def test_trying_to_access_missing_attributes_raises_attribute_error():
     # then
     with pytest.raises(AttributeError, match="'DataSet' object has no attribute 'missing_attr'"):
         dataset.missing_attr
+
+
+def test_can_hotplug_new_dataframe_to_dataset():
+    # given
+    dataset = DataSet(pd.DataFrame([], columns=["one_value"]))
+    dataframe = pd.DataFrame([[1], [2], [3]], columns=["one_value"])
+    dataset.dataframe = dataframe
+    # then
+    pd.testing.assert_frame_equal(dataset.dataframe, dataframe)
+
+
+def test_cannot_hotplug_badly_formed_dataframe_to_dataset():
+    # given
+    dataset = DataSet(pd.DataFrame([], columns=["one_value"]))
+    forbidden_name_with_spaces = "a b"
+    dataframe = pd.DataFrame([[1]], columns=[forbidden_name_with_spaces])
+    message = re.escape(
+        f'"{forbidden_name_with_spaces}" not allowed as column name(s): ' f"invalid identifier(s)"
+    )
+    with pytest.raises(ValueError, match=message):
+        dataset.dataframe = dataframe
