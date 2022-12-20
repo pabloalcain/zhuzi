@@ -24,22 +24,29 @@ class DataSetTemplate(DataSet):
         if dataframe is None:
             values = {arg: pd.Series(dtype=argtype) for arg, argtype in self._point_args_and_types}
             dataframe = pd.DataFrame(values)
-        else:
-            self._validate_columns_and_point(dataframe)
         super().__init__(dataframe)
+
+    @property
+    def dataframe(self) -> pd.DataFrame:
+        return self._dataframe
+
+    @dataframe.setter
+    def dataframe(self, value: pd.DataFrame):
+        self._validate_columns_and_point(value)
+        self._dataframe = value
 
     def _validate_columns_and_point(self, dataframe):
         if not set(self._point_args).issubset(dataframe.columns):
             raise BadDataFrameException(
                 f"DataFrame columns are {sorted(dataframe.columns)} and they should match "
-                f"CustomPointArguments {self._point_args}"
+                f"CustomPoint arguments {self._point_args}"
             )
         if not set(self._point_args_and_types).issubset(sorted(dataframe.dtypes.items())):
             columns_types = {k: str(v) for k, v in dataframe.dtypes.items()}
             point_types = {arg: str(argtype) for arg, argtype in self._point_args_and_types}
             raise BadDataFrameException(
                 f"DataFrame columns types are {columns_types} and they should match "
-                f"CustomPointArguments {point_types}"
+                f"CustomPoint arguments {point_types}"
             )
 
     @property

@@ -79,7 +79,7 @@ def test_custom_dataset_raises_error_when_df_col_name_does_not_match_attrs_of_po
 
     # then
     message = re.escape(
-        "DataFrame columns are ['wrong_name'] and they should match CustomPointArguments "
+        "DataFrame columns are ['wrong_name'] and they should match CustomPoint arguments "
         "['my_argument']"
     )
 
@@ -100,7 +100,7 @@ def test_custom_dataset_raises_error_when_df_col_name_does_not_match_attrs_of_po
 
     # then
     message = re.escape(
-        "DataFrame columns are ['another_wrong_name'] and they should match CustomPointArguments "
+        "DataFrame columns are ['another_wrong_name'] and they should match CustomPoint arguments "
         "['another_argument']"
     )
 
@@ -122,7 +122,7 @@ def test_custom_dataset_raises_error_when_df_col_type_does_not_match_attrs_of_po
     # then
     message = (
         "DataFrame columns types are {'my_argument': 'float64'} and they should match "
-        "CustomPointArguments {'my_argument': 'int64'}"
+        "CustomPoint arguments {'my_argument': 'int64'}"
     )
 
     with pytest.raises(BadDataFrameException, match=message):
@@ -140,7 +140,7 @@ def test_custom_dataset_raises_error_when_df_col_type_does_not_match_attrs_of_po
     # then
     message = (
         "DataFrame columns types are {'my_argument': 'int64'} and they should match "
-        "CustomPointArguments {'my_argument': 'float64'}"
+        "CustomPoint arguments {'my_argument': 'float64'}"
     )
 
     with pytest.raises(BadDataFrameException, match=message):
@@ -183,10 +183,28 @@ def test_column_names_can_be_accessed_as_attributes_of_dataset(custom_1d_dataset
     pd.testing.assert_series_equal(custom_dataset.my_argument, LEN_3_DATAFRAME["my_argument"])
 
 
-def test_custom_dataset_dataframe_can_have_extra_colums(custom_1d_dataset):
+def test_custom_dataset_dataframe_can_have_extra_columns(custom_1d_dataset):
     # given
     CustomDataSet, CustomPoint = custom_1d_dataset
     longer_dataframe = pd.DataFrame([[0, 1.0], [1, 2.0]], columns=["a_new_argument", "my_argument"])
     custom_dataset = CustomDataSet(longer_dataframe)
     # then
     pd.testing.assert_frame_equal(custom_dataset.dataframe, longer_dataframe)
+
+
+def test_custom_dataset_raises_error_when_hotplugging_badly_formed_dataframe(
+    custom_1d_dataset,
+):
+    # given
+    CustomDataSet, CustomPoint = custom_1d_dataset
+    dataset = CustomDataSet(LEN_3_DATAFRAME)
+
+    badly_formed_dataframe = pd.DataFrame({"my_argument": pd.Series(dtype="int")})
+    # then
+    message = (
+        "DataFrame columns types are {'my_argument': 'int64'} and they should match "
+        "CustomPoint arguments {'my_argument': 'float64'}"
+    )
+
+    with pytest.raises(BadDataFrameException, match=message):
+        dataset.dataframe = badly_formed_dataframe
