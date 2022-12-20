@@ -1,3 +1,5 @@
+import re
+
 import pandas as pd
 import pytest
 
@@ -129,3 +131,39 @@ def test_datapoint_keyword_arguments_are_preserved_as_attributes():
     datapoint = DataPoint(one_value=1)
     # then
     assert datapoint.one_value == 1
+
+
+def test_item_from_dataframe_with_named_column_preserves_attribute_name():
+    # given
+    dataframe = pd.DataFrame([[1]], columns=["one_value"])
+    dataset = DataSet(dataframe)
+    # when
+    datapoint = dataset[0]
+    # then
+    assert datapoint.one_value == 1
+
+
+def test_dataframes_on_datasets_cannot_have_columns_with_names_with_spaces():
+    # given
+    forbidden_name_with_spaces = "a b"
+    dataframe = pd.DataFrame([[1]], columns=[forbidden_name_with_spaces])
+    message = re.escape(
+        f'"{forbidden_name_with_spaces}" not allowed as column name(s): ' f"invalid identifier(s)"
+    )
+    with pytest.raises(ValueError, match=message):
+        DataSet(dataframe)
+
+
+def test_dataframes_on_datasets_cannot_have_columns_with_names_with_spaces_or_numbers():
+    # given
+    forbidden_name_with_spaces = "a b"
+    forbidden_name_is_an_int = 0
+    dataframe = pd.DataFrame(
+        [[1, 2]], columns=[forbidden_name_with_spaces, forbidden_name_is_an_int]
+    )
+    message = re.escape(
+        f'"{forbidden_name_is_an_int}", "{forbidden_name_with_spaces}" not allowed as column '
+        f"name(s): invalid identifier(s)"
+    )
+    with pytest.raises(ValueError, match=message):
+        DataSet(dataframe)
