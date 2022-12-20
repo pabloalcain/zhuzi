@@ -20,6 +20,7 @@ class DataSetTemplate:
             self.dataframe = pd.DataFrame(values)
         else:
             self._validate_columns_and_point(dataframe)
+            self.dataframe = dataframe
 
     def _validate_columns_and_point(self, dataframe):
         if sorted(dataframe.columns) != self._point_args:
@@ -38,7 +39,7 @@ class DataSetTemplate:
     @property
     def _point_args_and_types(self):
         sorted_annotations = sorted(self.point.__annotations__.items())
-        return ((arg, np.dtype(argtype)) for arg, argtype in sorted_annotations)
+        return [(arg, np.dtype(argtype)) for arg, argtype in sorted_annotations]
 
     @property
     def _point_args(self):

@@ -133,3 +133,18 @@ def test_custom_dataset_raises_error_when_df_col_type_does_not_match_attrs_of_po
 
     with pytest.raises(BadDataFrameException, match=message):
         CustomDataSet(badly_formed_dataframe)
+
+
+def test_custom_dataset_dataframe_can_be_accessed():
+    # given
+    @dataclass
+    class CustomPoint:
+        my_argument: float
+
+    class CustomDataSet(DataSetTemplate):
+        point = CustomPoint
+
+    dataframe = pd.DataFrame({"my_argument": pd.Series(dtype="float")})
+    custom_dataset = CustomDataSet(dataframe)
+    # then
+    pd.testing.assert_frame_equal(custom_dataset.dataframe, dataframe)
