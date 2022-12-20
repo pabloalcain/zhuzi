@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 import pandas as pd
+import pytest
 
 from zhuzi.dataset import DataSetTemplate
 
@@ -38,3 +39,12 @@ def test_custom_dataset_with_another_point_generates_empty_dataframe_with_point_
         dataset.dataframe,
         pd.DataFrame({"another_argument": pd.Series(dtype="float64")}),
     )
+
+
+# TODO: Maybe the message we are sending isn't the best. Check.
+def test_custom_dataset_must_have_an_associated_point():
+    message = "Can't declare CustomDataSet with abstract class attribute `point`"
+    with pytest.raises(TypeError, match=message):
+
+        class CustomDataSet(DataSetTemplate):
+            pass
